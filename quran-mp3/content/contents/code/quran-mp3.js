@@ -163,7 +163,7 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
             if (res.hasOwnProperty("song")) {
                 // One single song
                 return that.track2Result(res.song);
-            } else if (res.hasOwnProperty("album") && res.album.hasOwnProperty("songs")) {
+            } else if (res.hasOwnProperty("album") && res.album.hasOwnProperty("audios")) {
                 // Album
                 var guid;
                 if (typeof CryptoJS !== "undefined" && typeof CryptoJS.SHA256 == "function") {
@@ -184,7 +184,7 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
                     result.tracks.push(that.track2Result(item));
                 });
                 Tomahawk.addUrlResult(url, result);
-            } else if (res.hasOwnProperty("songs")) {
+            } else if (res.hasOwnProperty("audios")) {
                 // A list of songs
                 var guid;
                 if (typeof CryptoJS !== "undefined" && typeof CryptoJS.SHA256 == "function") {
