@@ -39,7 +39,7 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
         } else if (newTitle.toLowerCase().indexOf(artist.toLowerCase() + "-") === 0) {
             newTitle = newTitle.slice(artist.length + 1).trim();
         } else if (newTitle.toLowerCase().indexOf(artist.toLowerCase()) === 0) {
-            // FIXME: This might break results where the artist name is a substring of the song title.
+            // FIXME: This might break results where the artist name is a substring of the audio title.
             newTitle = newTitle.slice(artist.length).trim();
         }
         return newTitle;
@@ -55,36 +55,36 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
                 results = [];
             // check the response
             if (response.results > 0) {
-                response.songs.forEach(function(song) {
-                    if (typeof(song.url) == 'undefined' || song.url == null) {
+                response.audios.forEach(function(audio) {
+                    if (typeof(audio.url) == 'undefined' || audio.url == null) {
                         return;
                     }
-                    if ((song.url.indexOf("http://api.soundcloud") === 0) || (song.url.indexOf("https://api.soundcloud") === 0)) { // unauthorised, use soundcloud resolver instead
+                    if ((audio.url.indexOf("http://api.soundcloud") === 0) || (audio.url.indexOf("https://api.soundcloud") === 0)) { // unauthorised, use soundcloud resolver instead
                         return;
                     }
-                    if (song.artist === null || song.title === null) {
+                    if (audio.artist === null || audio.title === null) {
                         // This track misses relevant information, so we are going to ignore it.
                         return;
                     }
                     var result  = {},
-                        dTitle  = that.cleanTitle(song.title, song.artist),
-                        dArtist = song.artist,
+                        dTitle  = that.cleanTitle(audio.title, audio.artist),
+                        dArtist = audio.artist,
                         dAlbum  = "";
-                    if (song.album !== null) {
-                        dAlbum  = song.album;
+                    if (audio.album !== null) {
+                        dAlbum  = audio.album;
                     }
-                    if (typeof(song.sources) != 'undefined' && song.sources != null && song.sources.length > 0) {
-                        result.linkUrl = song.sources[0]
+                    if (typeof(audio.sources) != 'undefined' && audio.sources != null && audio.sources.length > 0) {
+                        result.linkUrl = audio.sources[0]
                     }
                     if ((dTitle.toLowerCase().indexOf(title.toLowerCase()) !== -1 && dArtist.toLowerCase().indexOf(artist.toLowerCase()) !== -1) || (artist === "" && album === "")) {
                         result.artist    = ((dArtist !== "") ? dArtist : artist);
                         result.album     = ((dAlbum  !== "") ? dAlbum : album);
                         result.track     = ((dTitle  !== "") ? dTitle : title);
                         result.source    = that.settings.name;
-                        result.url       = song.url;
+                        result.url       = audio.url;
                         result.extension = "mp3";
                         result.score     = 1.00;
-                        result.albumpos  = song.track_number;
+                        result.albumpos  = audio.track_number;
                         result.discnumber= "";
                         
                         results.push(result);
@@ -104,7 +104,7 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
         case TomahawkUrlType.Artist:
             return /https?:\/\/quran.deen-ul-islam.org\/artist\//.test(url);
         case TomahawkUrlType.Track:
-            return /https?:\/\/quran.deen-ul-islam.org\/song\//.test(url);
+            return /https?:\/\/quran.deen-ul-islam.org\/audio\//.test(url);
         case TomahawkUrlType.Playlist:
             return /https?:\/\/quran.deen-ul-islam.org\/playlist\//.test(url);
             // case TomahawkUrlType.Playlist:
@@ -142,9 +142,9 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
         } else if (/\/album\//.test(url)) {
             query += "/album/" + urlParts[3];
             query += "/0/114/";
-        } else if (/\/song\//.test(url)) {
-            // Just one simple song
-            query += "/song/" + urlParts[3];
+        } else if (/\/audio\//.test(url)) {
+            // Just one simple audio
+            query += "/audio/" + urlParts[3];
         } else if (/\/playlist\//.test(url)) {
             query += "/playlist/" + urlParts[3];
             query += "/0/114/";
@@ -160,9 +160,9 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
         }
         Tomahawk.asyncRequest(query, function(xhr) {
             var res = JSON.parse(xhr.responseText);
-            if (res.hasOwnProperty("song")) {
-                // One single song
-                return that.track2Result(res.song);
+            if (res.hasOwnProperty("audio")) {
+                // One single audio
+                return that.track2Result(res.audio);
             } else if (res.hasOwnProperty("album") && res.album.hasOwnProperty("audios")) {
                 // Album
                 var guid;
@@ -180,12 +180,12 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
                         url: url,
                      tracks: []
                 };
-                res.site.songs.forEach(function(item) {
+                res.site.audios.forEach(function(item) {
                     result.tracks.push(that.track2Result(item));
                 });
                 Tomahawk.addUrlResult(url, result);
             } else if (res.hasOwnProperty("audios")) {
-                // A list of songs
+                // A list of audios
                 var guid;
                 if (typeof CryptoJS !== "undefined" && typeof CryptoJS.SHA256 == "function") {
                     guid = CryptoJS.SHA256(query).toString(CryptoJS.enc.Hex);
@@ -201,7 +201,7 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
                         url: url,
                      tracks: []
                 };
-                res.songs.forEach(function(item) {
+                res.audios.forEach(function(item) {
                     result.tracks.push(that.track2Result(item));
                 });
                 Tomahawk.addUrlResult(url, result);
