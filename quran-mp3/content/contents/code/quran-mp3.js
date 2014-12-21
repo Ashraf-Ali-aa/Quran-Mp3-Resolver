@@ -19,9 +19,9 @@
  */
 var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
     settings: {
-        name: "Quran.Mp3",
+        name: "Quran Mp3",
         icon: "quran-mp3-icon.png",
-        weight: 30,
+        weight: 90,
         timeout: 5
     },
     init: function () {
@@ -43,23 +43,9 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
         } else if (newTitle.toLowerCase().indexOf(artist.toLowerCase() + "-") === 0) {
             newTitle = newTitle.slice(artist.length + 1).trim();
         } else if (newTitle.toLowerCase().indexOf(artist.toLowerCase()) === 0) {
-            // FIXME: This might break results where the artist name is a substring of the audio title.
             newTitle = newTitle.slice(artist.length).trim();
         }
         return newTitle;
-    },
-    identify: function (item) {
-        var result = "";
-        return result;
-    },
-    track2Result: function (item) {
-        var result = {
-            type: "track",
-            title: item.title,
-            artist: item.artist,
-            album: item.album
-        };
-        return result;
     },
     parsedAudio: function (item) {
         var result = {
@@ -68,8 +54,8 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
             track: item.title,
             albumpos: item.track,
             source: "quran-mp3",
-            size: (item.size || 0),
-            duration: (item.duration || 0),
+            size: (item.size || ""),
+            duration: (item.duration || ""),
             bitrate: "",
             url: item.url,
             extension: "mp3",
@@ -168,10 +154,9 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
             if (tracks instanceof Array) {
                 Tomahawk.log(tracks.length + " tracks returned.")
                 for (var i = 0; i < tracks.length; i++) {
-                    Tomahawk.log("tracks[i].artist=" + tracks[i].artist);
-                    Tomahawk.log("artist=          " + artist);
-                    Tomahawk.log("tracks[i].album =" + tracks[i].album);
-                    Tomahawk.log("album=           " + album);
+                    Tomahawk.log("artist =          " + tracks[i].artist);
+                    Tomahawk.log("album  =          " + tracks[i].album);
+                    Tomahawk.log("url    =          " + tracks[i].url);
                     if (tracks[i].artist && artist && tracks[i].artist.toLowerCase() === artist.toLowerCase() && tracks[i].album && album && tracks[i].album.toLowerCase() === album.toLowerCase()) {
                         results.push(that.parsedAudio(tracks[i]));
                     }
@@ -205,7 +190,6 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
         this.SearchQuery(qid, search_url);
     },
     search: function (qid, searchString) {
-        this.settings.strictMatch = false;
         search_url = this.baseUrl() + "search/" + encodeURIComponent(searchString) + "/0/200/";
         this.SearchQuery(qid, search_url);
     },
@@ -218,7 +202,7 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
         this.AlbumsQuery(qid, albums_url, artist);
     },
     tracks: function (qid, artist, album) {
-        var tracks_url = this.baseUrl() + "album/" + encodeURIComponent(artist) + "/0/114/";
+        var tracks_url = this.baseUrl() + "album/" + encodeURIComponent(album) + "/0/114/";
         this.TracksQuery(qid, tracks_url, artist, album);
     },
     collection: function () {
