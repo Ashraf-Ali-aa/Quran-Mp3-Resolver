@@ -2,18 +2,17 @@
     "name": "Quran Mp3",
     "pluginName": "quran-mp3",
     "author": "Deen ul Islam",
-    "email": "info@deen-ul-islam.org",
+    "email": "ali@deen-ul-islam.org",
     "version": "1.0.0",
     "website": "http://quran.deen-ul-islam.org",
     "description": "Get audio via Quran mp3 API",
     "type": "resolver/javascript",
     "manifest": {
         "main": "contents/code/quran-mp3.js",
-    	"scripts": [
-        ],
-	"icon": "contents/images/icon.png",
-	"resources": [
-        "contents/code/quran-mp3-icon.png"
-	]
+        "scripts": [],
+        "icon": "contents/images/icon.png",
+        "iconWhite": "contents/images/iconWhite.png",
+        "iconBackground": "contents/images/iconBackground.png",
+        "resources": ["contents/code/quran-mp3-icon.png"]
     }
 }
