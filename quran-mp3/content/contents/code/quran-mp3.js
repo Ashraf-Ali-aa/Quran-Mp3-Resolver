@@ -66,25 +66,25 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
         return result;
     },
     /// url lookup
-    
     canParseUrl: function (url, type) {
         switch (type) {
-            case TomahawkUrlType.Album:
-                return (/https?:\/\/quran.deen-ul-islam.org\/album\//).test(url);
-                    case TomahawkUrlType.Artist:
-                return (/https?:\/\/quran.deen-ul-islam.org\/artist\//).test(url);
-                    case TomahawkUrlType.Playlist:
-                return (/https?:\/\/quran.deen-ul-islam.org\/playlist\//).test(url)
-                    // case TomahawkUrlType.Track:
-                // case TomahawkUrlType.Any:
-                default:
-                    return (/https?:\/\/quran.deen-ul-islam.org\//).test(url);
+        case TomahawkUrlType.Album:
+            return (/https?:\/\/quran.deen-ul-islam.org\/album\//).test(url);
+        case TomahawkUrlType.Artist:
+            return (/https?:\/\/quran.deen-ul-islam.org\/artist\//).test(url);
+        case TomahawkUrlType.Playlist:
+            return (/https?:\/\/quran.deen-ul-islam.org\/playlist\//).test(url)
+            // case TomahawkUrlType.Track:
+            // case TomahawkUrlType.Any:
+        default:
+            return (/https?:\/\/quran.deen-ul-islam.org\//).test(url);
         }
     },
-
     lookupUrl: function (url) {
         var that = this;
-        var urlParts = url.split('/').filter(function (item) { return item.length !== 0; }).map(decodeURIComponent);
+        var urlParts = url.split('/').filter(function (item) {
+            return item.length !== 0;
+        }).map(decodeURIComponent);
         if (/https?:\/\/quran.deen-ul-islam.org\/album\//.test(url)) {
             // We have to deal with an Album
             Tomahawk.addUrlResult(url, {
@@ -121,18 +121,18 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
         } else {
             // We most likely have a track
             var query = url.replace("http://quran.deen-ul-islam.org", "http://toma.hk/api.php?id=");
-                Tomahawk.asyncRequest(query, function (xhr) {
-                    var res = JSON.parse(xhr.responseText);
-                    if (res.artist.length > 0 && res.title.length > 0) {
-                        Tomahawk.addUrlResult(url, {
-                            type: "track",
-                            title: res.title,
-                            artist: res.artist
-                        });
-                    } else {
-                        Tomahawk.addUrlResult(url, {});
-                    }
-                });
+            Tomahawk.asyncRequest(query, function (xhr) {
+                var res = JSON.parse(xhr.responseText);
+                if (res.artist.length > 0 && res.title.length > 0) {
+                    Tomahawk.addUrlResult(url, {
+                        type: "track",
+                        title: res.title,
+                        artist: res.artist
+                    });
+                } else {
+                    Tomahawk.addUrlResult(url, {});
+                }
+            });
         }
     },
     /// Query 
@@ -217,7 +217,7 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
     },
     TracksQuery: function (qid, search_url, artist, album) {
         var results = [];
-        var that    = this;
+        var that = this;
         Tomahawk.asyncRequest(search_url, function (xhr) {
             var response = JSON.parse(xhr.responseText);
             Tomahawk.log("Quran Mp3 tracks query:" + search_url);
@@ -225,8 +225,8 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
             var tracks = response.audios;
             if (tracks instanceof Array) {
                 Tomahawk.log(tracks.length + " tracks returned.");
-                for (var i = 0; i < tracks.length; i++) {                   
-                        results.push(that.parsedAudio(tracks[i]));
+                for (var i = 0; i < tracks.length; i++) {
+                    results.push(that.parsedAudio(tracks[i]));
                 }
             } else {
                 results.push(that.parsedAudio(tracks));
@@ -243,7 +243,6 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
     },
     // Script Collection Support
     resolve: function (qid, artist, album, title) {
-        
         var search_url = this.baseUrl() + "search/" + encodeURIComponent(title) + "/0/114/";
         //var search_url = this.baseUrl() + "search-filter/" + encodeURIComponent(artist) + "/" + encodeURIComponent(title) + "/" + encodeURIComponent(title)"/0/114/";
         //var search_url = this.baseUrl() + "&artist=" + artist + "&album=" + album + "&title=" + title + "&count=1";
