@@ -2,7 +2,7 @@
  *
  * Copyright 2011, lasonic <lasconic@gmail.com>
  * Copyright 2013, Uwe L. Korn <uwelk@xhochy.com>
- * Copyright 2014, Deen ul islam <ali@deen-ul-islam.org>
+ * Copyright 2015, Deen ul islam <ali@deen-ul-islam.org>
  *
  * Tomahawk is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -135,7 +135,7 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
                 });
         }
     },
-    /// mod 
+    /// Query 
     SearchQuery: function (qid, search_url) {
         var results = [];
         var that = this;
