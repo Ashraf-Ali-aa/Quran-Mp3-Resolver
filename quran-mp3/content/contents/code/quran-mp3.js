@@ -149,21 +149,22 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
         Tomahawk.asyncRequest(search_url, function (xhr) {
             var response = JSON.parse(xhr.responseText);
             Tomahawk.log("Quran Mp3 tracks query:" + search_url);
-            Tomahawk.log("Quran Mp3 tracks response:" + xhr.responseText);
+            //Tomahawk.log("Quran Mp3 tracks response:" + xhr.responseText);
             var tracks = response.audios;
             if (tracks instanceof Array) {
-                Tomahawk.log(tracks.length + " tracks returned.")
+                Tomahawk.log(tracks.length + " tracks returned.");
                 for (var i = 0; i < tracks.length; i++) {
-                    Tomahawk.log("artist =          " + tracks[i].artist);
-                    Tomahawk.log("album  =          " + tracks[i].album);
-                    Tomahawk.log("url    =          " + tracks[i].url);
-                    if (tracks[i].artist && artist && tracks[i].artist.toLowerCase() === artist.toLowerCase() && tracks[i].album && album && tracks[i].album.toLowerCase() === album.toLowerCase()) {
+                    //Tomahawk.log("artist =          " + tracks[i].artist);
+                    //Tomahawk.log("album  =          " + tracks[i].album);
+                    //Tomahawk.log("url    =          " + tracks[i].url);
+                    if (tracks[i].artist.toLowerCase() === artist.toLowerCase()) {
                         results.push(that.parsedAudio(tracks[i]));
                     }
                 }
-            } else if (tracks && tracks.artist && artist && tracks.artist.toLowerCase() === artist.toLowerCase() && tracks.album && album && tracks.album.toLowerCase() === album.toLowerCase()) {
+            } else if (tracks.artist.toLowerCase() === artist.toLowerCase()) {
                 results.push(that.parsedAudio(tracks));
             }
+/*
             return_tracks.sort(function (a, b) {
                 if (a.albumpos < b.albumpos) {
                     return -1;
@@ -173,6 +174,7 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
                     return 0;
                 }
             });
+*/
             var return_tracks = {
                 qid: qid,
                 artist: artist,
