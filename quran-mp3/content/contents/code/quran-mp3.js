@@ -21,8 +21,8 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
     settings: {
         name: "Quran Mp3",
         icon: "quran-mp3-icon.png",
-        weight: 90,
-        timeout: 5
+        weight: 95,
+        timeout: 10
     },
     init: function () {
         Tomahawk.reportCapabilities(TomahawkResolverCapability.Browsable | TomahawkResolverCapability.UrlLookup);
@@ -62,9 +62,9 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
             album: item.album,
             albumpos: item.track_number,
             track: item.title,
-            info: item.title,
-            size: (item.size || 0),
-            duration: (item.duration || 0),
+            //info: item.title,
+            //size: (item.size || 0),
+            //duration: (item.duration || 0),
             bitrate: "",
             source: "quran-mp3",
             url: item.url,
@@ -264,7 +264,6 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
     },
     // Script Collection Support
     resolve: function (qid, artist, album, title) {
-        //var search_url = this.baseUrl() + "search/" + encodeURIComponent(artist) + "/0/114/";
         var search_url = this.baseUrl() + "search-filter/" + encodeURIComponent(artist) + "/" + encodeURIComponent(album) + "/" + encodeURIComponent(title) + "/0/114/";
         this.SearchQuery(qid, search_url);
     },
@@ -282,7 +281,6 @@ var QuranMp3Resolver = Tomahawk.extend(TomahawkResolver, {
     },
     tracks: function (qid, artist, album) {
         var tracks_url = this.baseUrl() + "search-filters/" + encodeURIComponent(artist) + "/" + encodeURIComponent(album) + "/0/400/";
-        //var tracks_url = this.baseUrl() + "album/" + encodeURIComponent(album) + "/0/300/";
         this.TracksQuery(qid, tracks_url, artist, album);
     },
     collection: function () {
